@@ -46,10 +46,19 @@ platform :ios do
 
     current_build_number = previous_build_number + 1
 
-    increment_build_number(
-      xcodeproj: "#{GITHUB_WORKSPACE}/LoopFollow.xcodeproj",
-      build_number: current_build_number
-    )      
+    # Cambiar la versión del Target Principal
+    set_info_plist_value(
+      path: "#{GITHUB_WORKSPACE}/LoopFollow/Info.plist",
+      key: "CFBundleVersion",
+      value: "#{current_build_number}"
+    )
+
+    # Cambiar la versión del Target de la Extensión
+    set_info_plist_value(
+      path: "#{GITHUB_WORKSPACE}/LoopFollowLAExtension/ExtensionInfo.plist",
+      key: "CFBundleVersion",
+      value: "#{current_build_number}"
+    )
     
     match(
       type: "appstore",
