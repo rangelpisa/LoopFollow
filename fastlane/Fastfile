@@ -105,7 +105,7 @@ platform :ios do
       path: "#{GITHUB_WORKSPACE}/LoopFollow.xcodeproj",
       profile_name: mapping[LA_IDENTIFIER],
       code_sign_identity: "iPhone Distribution",
-      targets: ["LoopFollowLAExtensionExtension"]
+      targets: ["LoopFollowLAExtension"]
     )
 
     gym(
