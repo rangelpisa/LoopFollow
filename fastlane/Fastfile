@@ -105,10 +105,10 @@ platform :ios do
       path: "#{GITHUB_WORKSPACE}/LoopFollow.xcodeproj",
       profile_name: mapping[LA_IDENTIFIER],
       code_sign_identity: "iPhone Distribution",
-      targets: ["LoopFollowLAExtensionExtension"]
+      targets: ["LoopFollowLAExtension"]
     )
 
-gym(
+    gym(
       export_method: "app-store",
       scheme: "LoopFollow",
       output_name: "LoopFollow.ipa",
@@ -117,12 +117,11 @@ gym(
       buildlog_path: 'buildlog',
       export_options: {
         provisioningProfiles: {
-          "#{APP_IDENTIFIER}" => mapping[APP_IDENTIFIER],
-          "#{LA_IDENTIFIER}" => mapping[LA_IDENTIFIER]
+          APP_IDENTIFIER => mapping[APP_IDENTIFIER],
+          LA_IDENTIFIER => mapping[LA_IDENTIFIER]
         }
       }
     )
-
     copy_artifacts(
       target_path: "artifacts",
       artifacts: ["*.mobileprovision", "*.ipa", "*.dSYM.zip"]
