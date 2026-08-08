@@ -101,27 +101,25 @@ platform :ios do
       targets: ["LoopFollow"]
     )
 
-    update_code_signing_settings(
-      path: "#{GITHUB_WORKSPACE}/LoopFollow.xcodeproj",
-      profile_name: mapping[LA_IDENTIFIER],
-      code_sign_identity: "iPhone Distribution",
-      targets: ["LoopFollowLAExtension"]
-    )
+update_code_signing_settings(
+  use_automatic_signing: false,
+  path: "LoopFollow.xcodeproj",
+  team_id: TEAMID,
+  bundle_identifier: LA_IDENTIFIER,
+  profile_name: "match AppStore #{LA_IDENTIFIER}"
+)
 
-    gym(
-      export_method: "app-store",
-      scheme: "LoopFollow",
-      output_name: "LoopFollow.ipa",
-      configuration: "Release",
-      destination: 'generic/platform=iOS',
-      buildlog_path: 'buildlog',
-      export_options: {
-        provisioningProfiles: {
-          APP_IDENTIFIER => mapping[APP_IDENTIFIER],
-          LA_IDENTIFIER => mapping[LA_IDENTIFIER]
-        }
-      }
-    )
+# Reemplaza la llamada a gym(...) por esto:
+gym(
+  export_method: "app-store",
+  scheme: "LoopFollow",
+  export_options: {
+    provisioningProfiles: {
+      "com.#{TEAMID}.LoopFollow#{APP_SUFFIX}" => "match AppStore com.#{TEAMID}.LoopFollow#{APP_SUFFIX}",
+      "com.#{TEAMID}.LoopFollow#{APP_SUFFIX}.LoopFollowLAExtension" => "match AppStore com.#{TEAMID}.LoopFollow#{APP_SUFFIX}.LoopFollowLAExtension"
+    }
+  }
+)
     copy_artifacts(
       target_path: "artifacts",
       artifacts: ["*.mobileprovision", "*.ipa", "*.dSYM.zip"]
