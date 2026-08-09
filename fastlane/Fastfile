@@ -48,15 +48,6 @@ platform :ios do
   desc "Build Loop Follow"
   lane :build_LoopFollow do
     setup_ci if ENV['CI']
-
-# Descargar el certificado intermedio directamente dentro de la carpeta fastlane
-    sh("curl -fL https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer -o fastlane/AppleWWDRCAG3.cer")
-
-    # Importarlo usando el archivo guardado en fastlane/
-    import_certificate(
-      certificate_path: "fastlane/AppleWWDRCAG3.cer",
-      keychain_name: "fastlane_tmp_keychain"
-    )
     
     update_project_team(
       path: "#{GITHUB_WORKSPACE}/LoopFollow.xcodeproj",
