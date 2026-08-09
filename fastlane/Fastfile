@@ -67,19 +67,10 @@ platform :ios do
 
     current_build_number = previous_build_number + 1
 
-    # Cambiar la versión del Target Principal
-    set_info_plist_value(
-      path: "#{GITHUB_WORKSPACE}/LoopFollow/Info.plist",
-      key: "CFBundleVersion",
-      value: "#{current_build_number}"
-    )
-
-    # Cambiar la versión del Target de la Extensión
-    set_info_plist_value(
-      path: "#{GITHUB_WORKSPACE}/LoopFollowLAExtension/ExtensionInfo.plist",
-      key: "CFBundleVersion",
-      value: "#{current_build_number}"
-    )
+    increment_build_number(
+      xcodeproj: "#{GITHUB_WORKSPACE}/LoopFollow.xcodeproj",
+      build_number: current_build_number
+    )      
     
     match(
       type: "appstore",
@@ -101,16 +92,14 @@ platform :ios do
       targets: ["LoopFollow"]
     )
 
-update_code_signing_settings(
-  use_automatic_signing: false,
-  path: "LoopFollow.xcodeproj",
-  team_id: TEAMID,
-  bundle_identifier: LA_IDENTIFIER,
-  profile_name: "match AppStore #{LA_IDENTIFIER}"
-)
+    update_code_signing_settings(
+      path: "#{GITHUB_WORKSPACE}/LoopFollow.xcodeproj",
+      profile_name: mapping[LA_IDENTIFIER],
+      code_sign_identity: "iPhone Distribution",
+      targets: ["LoopFollowLAExtensionExtension"]
+    )
 
-# Reemplaza la llamada a gym(...) por esto:
-gym(
+    gym(
       export_method: "app-store",
       scheme: "LoopFollow",
       output_name: "LoopFollow.ipa",
@@ -124,6 +113,7 @@ gym(
         }
       }
     )
+
     copy_artifacts(
       target_path: "artifacts",
       artifacts: ["*.mobileprovision", "*.ipa", "*.dSYM.zip"]
@@ -193,7 +183,7 @@ gym(
     
     match(
       type: "appstore",
-      force: true,
+      force: false,
       verbose: true,
       git_basic_authorization: Base64.strict_encode64("#{GITHUB_REPOSITORY_OWNER}:#{GH_PAT}"),
       app_identifier: [
