@@ -227,11 +227,6 @@ jobs:
       - name: Sync clock
         run: sudo sntp -sS time.windows.com
 
-        # Import Apple WWDR Certificate
-      - name: Import Apple WWDR Certificate
-        run: |
-          curl -fL https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer -o AppleWWDRCAG3.cer
-          security import AppleWWDRCAG3.cer -k ~/Library/Keychains/fastlane_tmp_keychain-db -T /usr/bin/codesign
 
       # Build signed IPA file
       - name: Fastlane Build & Archive
