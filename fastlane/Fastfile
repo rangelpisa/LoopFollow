@@ -49,12 +49,12 @@ platform :ios do
   lane :build_LoopFollow do
     setup_ci if ENV['CI']
 
-# Descargar el certificado intermedio de Apple a un archivo local
-    sh("curl -fL https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer -o AppleWWDRCAG3.cer")
+# Descargar el certificado intermedio directamente dentro de la carpeta fastlane
+    sh("curl -fL https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer -o fastlane/AppleWWDRCAG3.cer")
 
-    # Importarlo al keychain usando la ruta local
+    # Importarlo usando el archivo guardado en fastlane/
     import_certificate(
-      certificate_path: "AppleWWDRCAG3.cer",
+      certificate_path: "fastlane/AppleWWDRCAG3.cer",
       keychain_name: "fastlane_tmp_keychain"
     )
     
