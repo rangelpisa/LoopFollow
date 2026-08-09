@@ -111,15 +111,19 @@ update_code_signing_settings(
 
 # Reemplaza la llamada a gym(...) por esto:
 gym(
-  export_method: "app-store",
-  scheme: "LoopFollow",
-  export_options: {
-    provisioningProfiles: {
-      "com.#{TEAMID}.LoopFollow#{APP_SUFFIX}" => "match AppStore com.#{TEAMID}.LoopFollow#{APP_SUFFIX}",
-      "com.#{TEAMID}.LoopFollow#{APP_SUFFIX}.LoopFollowLAExtension" => "match AppStore com.#{TEAMID}.LoopFollow#{APP_SUFFIX}.LoopFollowLAExtension"
-    }
-  }
-)
+      export_method: "app-store",
+      scheme: "LoopFollow",
+      output_name: "LoopFollow.ipa",
+      configuration: "Release",
+      destination: 'generic/platform=iOS',
+      buildlog_path: 'buildlog',
+      export_options: {
+        provisioningProfiles: {
+          APP_IDENTIFIER => mapping[APP_IDENTIFIER],
+          LA_IDENTIFIER => mapping[LA_IDENTIFIER]
+        }
+      }
+    )
     copy_artifacts(
       target_path: "artifacts",
       artifacts: ["*.mobileprovision", "*.ipa", "*.dSYM.zip"]
