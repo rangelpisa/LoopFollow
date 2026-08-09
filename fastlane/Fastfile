@@ -48,6 +48,12 @@ platform :ios do
   desc "Build Loop Follow"
   lane :build_LoopFollow do
     setup_ci if ENV['CI']
+
+# AGREGAR ESTA LÍNEA JUSTO DESPUÉS DE setup_ci:
+    import_certificate(
+      certificate_path: "https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer",
+      keychain_name: ENV["KEYCHAIN_NAME"] || "fastlane_tmp_keychain"
+    )
     
     update_project_team(
       path: "#{GITHUB_WORKSPACE}/LoopFollow.xcodeproj",
