@@ -227,7 +227,6 @@ jobs:
       - name: Sync clock
         run: sudo sntp -sS time.windows.com
 
-
       # Build signed IPA file
       - name: Fastlane Build & Archive
         run: bundle exec fastlane build_LoopFollow
